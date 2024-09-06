@@ -84,7 +84,14 @@ local function get(src)
         error("Player Server ID is not valid:" .. tostring(src))
     end
 
-    return cache[src] or 0
+    if cache[src] ~= nil then
+        return cache[src]
+    end
+
+    local license = GetPlayerIdentifierByType(src, "license")
+    local current = exports.oxmysql:prepare_async("SELECT xp FROM xp WHERE id = ?", {license})
+    cache[src] = current
+    return current
 end
 exports("get", get)
 
