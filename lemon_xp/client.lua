@@ -12,7 +12,6 @@ RegisterNetEvent("lemon_xp:ready", ready)
 local function updated(_, _, newXP, newLevel)
     xp = newXP
     level = newLevel
-    print(newXP, newLevel)
 end
 RegisterNetEvent("lemon_xp:updated", updated)
 
