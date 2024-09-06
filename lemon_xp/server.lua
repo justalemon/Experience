@@ -127,7 +127,9 @@ local function getXP(src)
         end
 
         local parsed = json.decode(contents)
-        return parsed[license] or 0
+        local current = parsed[license] or 0
+        cache[src] = current
+        return current
     end
 end
 exports("getXP", getXP)
