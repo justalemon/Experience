@@ -5,6 +5,8 @@ local storage = (function ()
         return method
     end
 
+    print("Guessing storage mode...")
+
     if GetResourceState("oxmysql") == "started" then
         return "oxmysql"
     end
@@ -77,6 +79,15 @@ local function init()
         print("ERROR! Experience script should be called lemon_xp, current name is " .. GetCurrentResourceName())
         StopResource(GetCurrentResourceName())
         return
+    end
+
+    print("Storage mode in use: " .. storage)
+
+    if storage == "json" then
+        print("Warning: Using JSON file for data storage")
+        print("This should not be used for public servers")
+        print("You should only use it for local testing")
+        print("You have been warned!")
     end
 end
 Citizen.CreateThread(init)
