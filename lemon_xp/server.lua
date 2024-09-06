@@ -13,6 +13,7 @@ local storage = (function ()
     return "json"
 end)()
 local cache = {}
+local multiplier = 1
 local calculateLevelForXP = function(current)
     if not current or current <= 0 then
         return 1
@@ -59,7 +60,7 @@ local function addXP(src, amount)
         error("Attempted to add experience equal or under zero: " .. tostring(amount))
     end
 
-    change(src, math.abs(amount))
+    change(src, math.abs(amount) * multiplier)
 end
 exports("addXP", addXP)
 
@@ -108,6 +109,24 @@ local function setLevelCalculator(cb)
     calculateLevelForXP = cb
 end
 exports("setLevelCalculator", setLevelCalculator)
+
+local function setMultiplier(mult)
+    if type(mult) ~= "number" then
+        error("Multiplier is not a number")
+    end
+
+    if mult < 1 then
+        error("Multiplier can't be set under one")
+    end
+
+    multiplier = mult
+end
+exports("setMultiplier", setMultiplier)
+
+local function getMultiplier()
+    return multiplier
+end
+exports("getMultiplier", getMultiplier)
 
 local function clientReady()
     local src = tonumber(source)
