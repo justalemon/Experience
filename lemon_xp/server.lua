@@ -26,7 +26,7 @@ local calculateXPForLevel = function(level)
     if not level or level <= 1 then
         return 0
     else
-        return 10000 * level
+        return 10000 * (level - 1)
     end
 end
 
