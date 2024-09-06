@@ -65,6 +65,22 @@ local function remove(src, amount)
 end
 exports("remove", remove)
 
+local function get(src)
+    local _src = src
+    src = tonumber(src)
+
+    if not src then
+        error("Player Server ID is not a number: " .. tostring(_src))
+    end
+
+    if GetNumPlayerIdentifiers(src) == 0 then
+        error("Player Server ID is not valid:" .. tostring(src))
+    end
+
+    return cache[src] or 0
+end
+exports("get", get)
+
 local function clientReady()
     local src = tonumber(source)
 
