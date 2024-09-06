@@ -10,3 +10,10 @@ license "LGPL-3.0-or-later"
 
 server_script "server.lua"
 client_script "client.lua"
+
+convar_category "lemon_xp" {
+    "Configuration",
+    {
+        { "Storage Method", "lemon_xp_storage", "CV_MULTI", { { "oxmysql", "oxmysql" }, { "json", "json" } } }
+    }
+}
