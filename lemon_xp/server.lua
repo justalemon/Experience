@@ -80,6 +80,24 @@ local function change(src, amount)
     TriggerEvent("lemon_xp:updated", src, old, calculateLevelForXP(old), current, calculateLevelForXP(current))
 end
 
+local function getXPFromLicense(license)
+    if storage == "oxmysql" then
+        local current = exports.oxmysql:prepare_async("SELECT xp FROM xp WHERE id = ?", {license})
+        return current
+    elseif storage == "json" then
+        local contents = LoadResourceFile(GetCurrentResourceName(), "xp.json")
+
+        if contents == nil or contents == "" then
+            return 0
+        end
+
+        local parsed = json.decode(contents)
+        return parsed[license] or 0
+    else
+        return 0
+    end
+end
+
 -- EXPORTS
 
 local function addXP(src, amount)
@@ -121,23 +139,9 @@ local function getXP(src)
     end
 
     local license = GetPlayerIdentifierByType(src, "license")
-
-    if storage == "oxmysql" then
-        local current = exports.oxmysql:prepare_async("SELECT xp FROM xp WHERE id = ?", {license})
-        cache[src] = current
-        return current
-    elseif storage == "json" then
-        local contents = LoadResourceFile(GetCurrentResourceName(), "xp.json")
-
-        if contents == nil or contents == "" then
-            return 0
-        end
-
-        local parsed = json.decode(contents)
-        local current = parsed[license] or 0
-        cache[src] = current
-        return current
-    end
+    local xp = getXPFromLicense(license)
+    cache[src] = xp
+    return xp
 end
 exports("getXP", getXP)
 
