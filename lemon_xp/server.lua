@@ -187,12 +187,10 @@ AddEventHandler("playerDropped", playerDropped)
 
 local function clientReady()
     local src = tonumber(source)
-
-    if cache[src] == nil then
-        return
-    end
+    local xp = getXP(src)
+    TriggerClientEvent("lemon_xp:ready", src, xp, calculateLevelForXP(xp))
 end
-RegisterNetEvent("lemon_xp:clientReady", clientReady)
+RegisterNetEvent("lemon_xp:ready", clientReady)
 
 -- INITIALIZATION
 
