@@ -15,12 +15,12 @@ end)()
 local cache = {}
 local multipliers = {}
 local multiplier = 1
-local calculateLevelForXP = function(current)
-    if not current or current <= 0 then
+local calculateLevelForXP = function(xp)
+    if not xp or xp <= 0 then
         return 1
     end
 
-    return math.floor(current / 10000) + 1
+    return math.floor(xp / 10000) + 1
 end
 local calculateXPForLevel = function(level)
     if not level or level <= 1 then
@@ -158,6 +158,16 @@ local function setLevelCalculators(levelForXP, XPForLevel)
     calculateXPForLevel = XPForLevel
 end
 exports("setLevelCalculators", setLevelCalculators)
+
+local function getLevelForXP(xp)
+    return calculateLevelForXP(xp)
+end
+exports("getLevelForXP", getLevelForXP)
+
+local function getXPForLevel(level)
+    return calculateXPForLevel(level)
+end
+exports("getXPForLevel", getXPForLevel)
 
 local function setMultiplier(mult)
     if type(mult) ~= "number" then
