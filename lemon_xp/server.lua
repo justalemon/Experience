@@ -22,6 +22,13 @@ local calculateLevelForXP = function(current)
 
     return math.floor(current / 10000) + 1
 end
+local calculateXPForLevel = function(level)
+    if not level or level <= 1 then
+        return 0
+    else
+        return 10000 * level
+    end
+end
 
 -- INTERNAL TOOLS
 
@@ -139,14 +146,18 @@ local function getLevel(src)
 end
 exports("getLevel", getLevel)
 
-local function setLevelCalculator(cb)
-    if type(cb) ~= "function" then
-        error("Expected function, got " .. type(cb))
+local function setLevelCalculators(levelForXP, XPForLevel)
+    if type(levelForXP) ~= "function" then
+        error("Expected function, got " .. type(levelForXP))
+    end
+    if type(XPForLevel) ~= "function" then
+        error("Expected function, got " .. type(XPForLevel))
     end
 
-    calculateLevelForXP = cb
+    calculateLevelForXP = levelForXP
+    calculateXPForLevel = XPForLevel
 end
-exports("setLevelCalculator", setLevelCalculator)
+exports("setLevelCalculators", setLevelCalculators)
 
 local function setMultiplier(mult)
     if type(mult) ~= "number" then
