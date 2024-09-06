@@ -10,6 +10,16 @@ local storage = (function ()
     end
     return "json"
 end)()
+local cache = {}
+
+local function clientReady()
+    local src = tonumber(source)
+
+    if cache[src] == nil then
+        return
+    end
+end
+RegisterNetEvent("lemon_xp:clientReady", clientReady)
 
 local function init()
     if GetCurrentResourceName() ~= "lemon_xp" then
