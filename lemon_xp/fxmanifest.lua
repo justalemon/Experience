@@ -9,7 +9,8 @@ repository "https://github.com/justalemon/Experience"
 license "LGPL-3.0-or-later"
 
 server_script "server.lua"
-client_script "client.lua"
+
+server_only "yes"
 
 convar_category "lemon_xp" {
     "Configuration",

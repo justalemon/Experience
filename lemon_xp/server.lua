@@ -76,7 +76,6 @@ local function change(src, amount)
         exports.oxmysql:prepare_async("INSERT INTO xp (id, xp) VALUES (?, ?) ON DUPLICATE KEY UPDATE xp = VALUES(XP)", { license, current })
     end
 
-    TriggerClientEvent("lemon_xp:updated", src, old, calculateLevelForXP(old), current, calculateLevelForXP(current))
     TriggerEvent("lemon_xp:updated", src, old, calculateLevelForXP(old), current, calculateLevelForXP(current))
 end
 
@@ -238,13 +237,6 @@ local function playerDropped(_)
     multipliers[src] = nil
 end
 AddEventHandler("playerDropped", playerDropped)
-
-local function clientReady()
-    local src = tonumber(source)
-    local xp = getXP(src)
-    TriggerClientEvent("lemon_xp:ready", src, xp, calculateLevelForXP(xp))
-end
-RegisterNetEvent("lemon_xp:ready", clientReady)
 
 -- COMMANDS
 
