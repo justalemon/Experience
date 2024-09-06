@@ -61,7 +61,7 @@ local function add(src, amount)
 
     change(src, math.abs(amount))
 end
-exports("add", add)
+exports("addXP", add)
 
 local function remove(src, amount)
     if amount <= 0 then
@@ -70,7 +70,7 @@ local function remove(src, amount)
 
     change(src, -amount)
 end
-exports("remove", remove)
+exports("removeXP", remove)
 
 local function get(src)
     local _src = src
@@ -93,7 +93,7 @@ local function get(src)
     cache[src] = current
     return current
 end
-exports("get", get)
+exports("getXP", get)
 
 local function getLevel(src)
     return getLevelForXP(get(src))
