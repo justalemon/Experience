@@ -49,7 +49,18 @@ local function change(src, amount)
     cache[src] = current
 
     if storage == "json" then
-        error("not implemented")
+        local contents = LoadResourceFile(GetCurrentResourceName(), "xp.json")
+
+        if contents == nil or contents == "" then
+            local data = {
+                [license] = current
+            }
+            SaveResourceFile(GetCurrentResourceName(), "xp.json", json.encode(data), -1)
+        else
+            local parsed = json.decode(contents)
+            parsed[license] = current
+            SaveResourceFile(GetCurrentResourceName(), "xp.json", json.encode(parsed), -1)
+        end
     elseif storage == "oxmysql" then
         if GetResourceState("oxmysql") ~= "started" then
             error("Storage method set to oxmysql, but oxmysql is not running")
@@ -103,9 +114,21 @@ local function getXP(src)
     end
 
     local license = GetPlayerIdentifierByType(src, "license")
-    local current = exports.oxmysql:prepare_async("SELECT xp FROM xp WHERE id = ?", {license})
-    cache[src] = current
-    return current
+
+    if storage == "oxmysql" then
+        local current = exports.oxmysql:prepare_async("SELECT xp FROM xp WHERE id = ?", {license})
+        cache[src] = current
+        return current
+    elseif storage == "json" then
+        local contents = LoadResourceFile(GetCurrentResourceName(), "xp.json")
+
+        if contents == nil or contents == "" then
+            return 0
+        end
+
+        local parsed = json.decode(contents)
+        return parsed[license] or 0
+    end
 end
 exports("getXP", getXP)
 
