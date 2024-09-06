@@ -13,7 +13,7 @@ local storage = (function ()
     return "json"
 end)()
 local cache = {}
-local getLevelForXP = function(current)
+local calculateLevelForXP = function(current)
     if not current or current <= 0 then
         return 1
     end
@@ -96,9 +96,18 @@ end
 exports("getXP", getXP)
 
 local function getLevel(src)
-    return getLevelForXP(getXP(src))
+    return calculateLevelForXP(getXP(src))
 end
 exports("getLevel", getLevel)
+
+local function setLevelCalculator(cb)
+    if type(cb) ~= "function" then
+        error("Expected function, got " .. type(cb))
+    end
+
+    calculateLevelForXP = cb
+end
+exports("setLevelCalculator", setLevelCalculator)
 
 local function clientReady()
     local src = tonumber(source)
