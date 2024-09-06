@@ -154,7 +154,25 @@ local function setPlayerMultiplier(src, mult)
 end
 exports("setPlayerMultiplier", setPlayerMultiplier)
 
--- NETWORK EVENTS
+-- EVENTS
+
+local function playerJoining(src, _)
+    getXP(src)
+end
+AddEventHandler("playerJoining", playerJoining)
+
+local function playerDropped(_)
+    local src = tonumber(source)
+
+    if src == nil then
+        print("Warning: ID of dropped player is nil, unable to perform cleanup")
+        return
+    end
+
+    cache[src] = nil
+    multipliers[src] = nil
+end
+AddEventHandler("playerDropped", playerDropped)
 
 local function clientReady()
     local src = tonumber(source)
