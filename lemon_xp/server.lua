@@ -13,9 +13,19 @@ end)()
 local cache = {}
 
 local function change(src, amount)
+    local _src = src
     src = tonumber(src)
 
-    local identifier = GetPlayerIdentifierByType(src, "license")
+    if not src then
+        error("Player Server ID is invalid: " .. tostring(_src))
+    end
+
+    local license = GetPlayerIdentifierByType(src, "license")
+
+    if not license then
+        error("Player " .. tostring(src) .. " does not has a license or is not valid")
+    end
+
     local total = (cache[src] or 0) + amount
 
     if total < 0 then
@@ -31,13 +41,11 @@ local function change(src, amount)
             error("Storage method set to oxmysql, but oxmysql is not running")
         end
 
-        exports.oxmysql:prepare_async("INSERT INTO xp (id, xp) VALUES (?, ?) ON DUPLICATE KEY UPDATE xp = VALUES(XP)", {identifier, total})
+        exports.oxmysql:prepare_async("INSERT INTO xp (id, xp) VALUES (?, ?) ON DUPLICATE KEY UPDATE xp = VALUES(XP)", {license, total})
     end
 end
 
 local function add(src, amount)
-    src = tonumber(src)
-
     if amount <= 0 then
         error("Attempted to add experience equal or under zero: " .. tostring(amount))
     end
@@ -47,8 +55,6 @@ end
 exports("add", add)
 
 local function remove(src, amount)
-    src = tonumber(src)
-
     if amount <= 0 then
         error("Attempted to add experience equal or under zero: " .. tostring(amount))
     end
