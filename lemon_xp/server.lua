@@ -150,7 +150,18 @@ local function setPlayerMultiplier(src, mult)
         error("Invalid player id: " .. tostring(_src))
     end
 
-    multipliers[src] = tonumber(mult)
+    local _mult = mult
+    mult = tonumber(mult)
+
+    if mult == nil then
+        error("Invalid multiplier value: " .. tostring(_mult))
+    end
+
+    if mult < 1 then
+        error("Multiplier can't be set under 1")
+    end
+
+    multipliers[src] = mult
 end
 exports("setPlayerMultiplier", setPlayerMultiplier)
 
