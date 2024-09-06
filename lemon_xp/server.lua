@@ -13,6 +13,13 @@ local storage = (function ()
     return "json"
 end)()
 local cache = {}
+local getLevelForXP = function(current)
+    if not current or current <= 0 then
+        return 1
+    end
+
+    return math.floor(current / 10000) + 1
+end
 
 local function change(src, amount)
     local _src = src
@@ -80,6 +87,11 @@ local function get(src)
     return cache[src] or 0
 end
 exports("get", get)
+
+local function getLevel(src)
+    return getLevelForXP(get(src))
+end
+exports("getLevel", getLevel)
 
 local function clientReady()
     local src = tonumber(source)
