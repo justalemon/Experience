@@ -13,6 +13,7 @@ local storage = (function ()
     return "json"
 end)()
 local cache = {}
+local multipliers = {}
 local multiplier = 1
 local calculateLevelForXP = function(current)
     if not current or current <= 0 then
@@ -64,7 +65,11 @@ local function addXP(src, amount)
         error("Attempted to add experience equal or under zero: " .. tostring(amount))
     end
 
-    change(src, math.abs(amount) * multiplier)
+    if multiplier[src] ~= nil and multiplier == 1 then
+        change(src, math.abs(amount) * multiplier[src])
+    else
+        change(src, math.abs(amount) * multiplier)
+    end
 end
 exports("addXP", addXP)
 
@@ -131,6 +136,23 @@ local function getMultiplier()
     return multiplier
 end
 exports("getMultiplier", getMultiplier)
+
+local function getPlayerMultiplier(src)
+    return multipliers[src]
+end
+exports("getPlayerMultiplier", getPlayerMultiplier)
+
+local function setPlayerMultiplier(src, mult)
+    local _src = src
+    src = tonumber(src)
+
+    if not src or GetNumPlayerIdentifiers(src) == 0 then
+        error("Invalid player id: " .. tostring(_src))
+    end
+
+    multipliers[src] = tonumber(mult)
+end
+exports("setPlayerMultiplier", setPlayerMultiplier)
 
 -- NETWORK EVENTS
 
