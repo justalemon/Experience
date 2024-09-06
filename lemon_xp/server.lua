@@ -54,25 +54,25 @@ local function change(src, amount)
     end
 end
 
-local function add(src, amount)
+local function addXP(src, amount)
     if amount <= 0 then
         error("Attempted to add experience equal or under zero: " .. tostring(amount))
     end
 
     change(src, math.abs(amount))
 end
-exports("addXP", add)
+exports("addXP", addXP)
 
-local function remove(src, amount)
+local function removeXP(src, amount)
     if amount <= 0 then
         error("Attempted to add experience equal or under zero: " .. tostring(amount))
     end
 
     change(src, -amount)
 end
-exports("removeXP", remove)
+exports("removeXP", removeXP)
 
-local function get(src)
+local function getXP(src)
     local _src = src
     src = tonumber(src)
 
@@ -93,10 +93,10 @@ local function get(src)
     cache[src] = current
     return current
 end
-exports("getXP", get)
+exports("getXP", getXP)
 
 local function getLevel(src)
-    return getLevelForXP(get(src))
+    return getLevelForXP(getXP(src))
 end
 exports("getLevel", getLevel)
 
