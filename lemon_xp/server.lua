@@ -65,8 +65,8 @@ local function addXP(src, amount)
         error("Attempted to add experience equal or under zero: " .. tostring(amount))
     end
 
-    if multiplier[src] ~= nil and multiplier == 1 then
-        change(src, math.abs(amount) * multiplier[src])
+    if multipliers[src] ~= nil and multiplier == 1 then
+        change(src, math.abs(amount) * multipliers[src])
     else
         change(src, math.abs(amount) * multiplier)
     end
