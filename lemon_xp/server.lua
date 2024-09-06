@@ -59,6 +59,7 @@ local function change(src, amount)
     end
 
     TriggerClientEvent("lemon_xp:updated", src, old, calculateLevelForXP(old), current, calculateLevelForXP(current))
+    TriggerEvent("lemon_xp:updated", src, old, calculateLevelForXP(old), current, calculateLevelForXP(current))
 end
 
 -- EXPORTS
