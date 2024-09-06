@@ -39,13 +39,14 @@ local function change(src, amount)
         error("Player " .. tostring(src) .. " does not has a license or is not valid")
     end
 
-    local total = (cache[src] or 0) + amount
+    local old = cache[src] or 0
+    local current = old + amount
 
-    if total < 0 then
-        total = 0
+    if current < 0 then
+        current = 0
     end
 
-    cache[src] = total
+    cache[src] = current
 
     if storage == "json" then
         error("not implemented")
@@ -54,8 +55,10 @@ local function change(src, amount)
             error("Storage method set to oxmysql, but oxmysql is not running")
         end
 
-        exports.oxmysql:prepare_async("INSERT INTO xp (id, xp) VALUES (?, ?) ON DUPLICATE KEY UPDATE xp = VALUES(XP)", {license, total})
+        exports.oxmysql:prepare_async("INSERT INTO xp (id, xp) VALUES (?, ?) ON DUPLICATE KEY UPDATE xp = VALUES(XP)", { license, current })
     end
+
+    TriggerClientEvent("lemon_xp:updated", src, old, calculateLevelForXP(old), current, calculateLevelForXP(current))
 end
 
 -- EXPORTS
