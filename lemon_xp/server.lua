@@ -22,6 +22,8 @@ local calculateLevelForXP = function(current)
     return math.floor(current / 10000) + 1
 end
 
+-- INTERNAL TOOLS
+
 local function change(src, amount)
     local _src = src
     src = tonumber(src)
@@ -54,6 +56,8 @@ local function change(src, amount)
         exports.oxmysql:prepare_async("INSERT INTO xp (id, xp) VALUES (?, ?) ON DUPLICATE KEY UPDATE xp = VALUES(XP)", {license, total})
     end
 end
+
+-- EXPORTS
 
 local function addXP(src, amount)
     if amount <= 0 then
@@ -128,6 +132,8 @@ local function getMultiplier()
 end
 exports("getMultiplier", getMultiplier)
 
+-- NETWORK EVENTS
+
 local function clientReady()
     local src = tonumber(source)
 
@@ -136,6 +142,8 @@ local function clientReady()
     end
 end
 RegisterNetEvent("lemon_xp:clientReady", clientReady)
+
+-- INITIALIZATION
 
 local function init()
     if GetCurrentResourceName() ~= "lemon_xp" then
