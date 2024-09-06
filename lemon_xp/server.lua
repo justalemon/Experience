@@ -246,6 +246,50 @@ local function clientReady()
 end
 RegisterNetEvent("lemon_xp:ready", clientReady)
 
+-- COMMANDS
+
+local function xpAddCommand(_, args, _)
+    if args[1] == nil then
+        print("Player ID not specified")
+        return
+    elseif args[2] == nil then
+        print("Experience amount not specified")
+        return
+    end
+    addXP(args[1], tonumber(args[2]))
+end
+RegisterCommand("xpadd", xpAddCommand, true)
+
+local function xpRemoveCommand(_, args, _)
+    if args[1] == nil then
+        print("Player ID not specified")
+        return
+    elseif args[2] == nil then
+        print("Experience amount not specified")
+        return
+    end
+    removeXP(args[1], tonumber(args[2]))
+end
+RegisterCommand("xpremove", xpRemoveCommand, true)
+
+local function xpInfoCommand(_, args, _)
+    if args[1] == nil then
+        print("No player id or identifier specified")
+        return
+    end
+
+    local src = tonumber(args[1])
+
+    if not src or src == nil then
+        local xp = getXPFromLicense(args[1])
+        print("Player " .. args[1] .. " has " .. tostring(xp) .. "XP (level " .. tostring(calculateLevelForXP(xp)) .. ")")
+    else
+        local xp = getXP(src)
+        print("Player " .. GetPlayerName(src) .. " has " .. tostring(xp) .. "XP (level " .. tostring(calculateLevelForXP(xp)) .. ")")
+    end
+end
+RegisterCommand("xpinfo", xpInfoCommand, true)
+
 -- INITIALIZATION
 
 local function init()
